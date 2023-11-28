@@ -8,24 +8,30 @@ const GroceryHome = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const { cart, addToCart } = useContext(CartContext);
 
-  const fetchProducts = async () => {
+  const [skip, setSkip] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const fetchProducts = async (page) => {
     try {
-      const response = await fetch('https://dummyjson.com/products');
+      setLoading(true);
+      const response = await fetch(`https://dummyjson.com/products?skip=${skip}`);
       const data = await response.json();
   
       if (data && data.products && Array.isArray(data.products)) {
-        setProducts(data.products);
+        setProducts((prevProducts) => [...prevProducts, ...data.products]);
       } else {
         console.error('Invalid data format:', data);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [skip]);
 
   const handleProductPress = (productId) => {
     navigation.navigate('ProductDetails', { productId });
@@ -73,6 +79,14 @@ const GroceryHome = ({ navigation }) => {
               </TouchableOpacity>
           )}
           }
+          onEndReached={
+            () => {
+              if (!loading) {
+                setSkip((prevSkip) => prevSkip + 30);
+              }
+            }
+          }
+          onEndReachedThreshold={0.1}
         />
       </View>
       <View style={styles.bg} />
