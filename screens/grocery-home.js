@@ -8,21 +8,6 @@ const GroceryHome = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const { cart, addToCart } = useContext(CartContext);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     const response = await fetch('https://dummyjson.com/products');
-  //     const data = await response.json();
-  
-  //     if (data && data.products && Array.isArray(data.products)) {
-  //       setProducts(data.products);
-  //     } else {
-  //       console.error('Invalid data format:', data);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching products:', error);
-  //   }
-  // };
-
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
 
